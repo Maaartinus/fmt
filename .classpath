@@ -3,13 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry exported="true" kind="lib" path="/mg-lib/main/aopalliance.jar"/>
 	<classpathentry exported="true" kind="lib" path="/mg-lib/main/slf4j-api-1.7.7.jar" sourcepath="/mg-lib/main/slf4j-api-1.7.7-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/mg-lib/main/jsr305-2.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="/mg-lib/main/guava-18.0.jar" sourcepath="/guava"/>
 	<classpathentry exported="true" kind="lib" path="/mg-lib/caliper-1.0-beta-2.jar"/>
-	<classpathentry exported="true" kind="lib" path="/mg-lib/main/guice-4.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="/mg-lib/main/guice-multibindings-4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="/mg-lib/main/lombok.jar" sourcepath="/lombok"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
