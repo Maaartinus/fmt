@@ -1,0 +1,9 @@
+/build
+
+*#*
+*.class
+*.log
+*.map
+*.pdf
+*.tmp
+*_tmp

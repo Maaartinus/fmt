@@ -1,0 +1,2 @@
+versionGit "1.00", project
+defaultTasks "test", "findbugs"
