@@ -1,11 +1,9 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
-
 import junit.framework.TestCase;
 
 public final class _FmtParserResultTest extends TestCase {
-	public void test() throws IOException {
+	public void test() {
 		check("[]", 0, "[1, -2]");
 		check("[]", 2, "");
 		check("[][]", 2, "[1, -2]");
@@ -13,7 +11,7 @@ public final class _FmtParserResultTest extends TestCase {
 		check("[pX]", 0, "01FE");
 	}
 
-	private void check(String format, int start, String expected) throws IOException {
+	private void check(String format, int start, String expected) {
 		final String[] strings = new String[2];
 		final FmtParserResult[] parserResults = new FmtParserResult[2];
 		for (int i=0; i<2; ++i) {

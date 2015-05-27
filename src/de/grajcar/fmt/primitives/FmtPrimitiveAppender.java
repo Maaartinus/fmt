@@ -1,7 +1,5 @@
 package de.grajcar.fmt.primitives;
 
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 
 import lombok.AccessLevel;
@@ -36,7 +34,7 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		return result;
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		if (subject instanceof Float) {
 			appendTo(target, context, ((Float) subject).doubleValue());
 		} else if (subject instanceof Double) {
@@ -50,43 +48,35 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		}
 	}
 
-	final void appendTo(Appendable target, FmtContext context, long subject) throws IOException {
+	final void appendTo(StringBuilder target, FmtContext context, long subject) {
 		assert Integer.bitCount(info.byteLength()) == 1;
 		if (options.unsigned() && info.byteLength()<8) subject &= ~(-1L << (8*info.byteLength()));
 		if (options.hex()) {
 			hexAppendTo(target, subject);
 		} else {
 			if (subject>=0 || !options.unsigned()) {
-				simpleAppendLongTo(target, subject);
+				target.append(subject);
 			} else {
 				final long tenth = (subject>>>1) / 5;
-				simpleAppendLongTo(target, tenth);
+				target.append(tenth);
 				target.append(LOWERCASE_HEX[(int) (subject - 10*tenth)]);
 			}
 		}
 	}
 
-	private void simpleAppendLongTo(Appendable target, long subject) throws IOException {
-		if (target instanceof StringBuilder) {
-			((StringBuilder) target).append(subject);
-		} else {
-			target.append(Long.toString(subject));
-		}
-	}
-
-	final void appendTo(Appendable target, FmtContext context, double subject) throws IOException {
+	final void appendTo(StringBuilder target, FmtContext context, double subject) {
 		target.append(String.format(context.locale(), "%s", Double.valueOf(subject))); //TODO
 	}
 
-	final void appendTo(Appendable target, FmtContext context, char subject) throws IOException {
+	final void appendTo(StringBuilder target, FmtContext context, char subject) {
 		target.append("" + subject); //TODO
 	}
 
-	final void appendTo(Appendable target, FmtContext context, boolean subject) throws IOException {
+	final void appendTo(StringBuilder target, FmtContext context, boolean subject) {
 		target.append("" + subject); //TODO
 	}
 
-	private void hexAppendTo(Appendable target, long subject) throws IOException {
+	private void hexAppendTo(StringBuilder target, long subject) {
 		final boolean isNegative = subject<0;
 		if (isNegative && !options.unsigned()) {
 			target.append('-');

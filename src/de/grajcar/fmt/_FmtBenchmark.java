@@ -34,12 +34,10 @@ import junit.framework.Assert;
 	@Benchmark public int timeFmt(int reps) {
 		int result = 0;
 		final String format = formatType.fmtFormat;
-		final StringBuilder sb = new StringBuilder();
-		final Fmt fmt = context.fmt(sb);
+		final Fmt fmt = context.fmt();
 		while (reps-->0) {
 			for (final Object n : objects) {
-				result += fmt.format(format, n, n).toString().length();
-				sb.delete(0, sb.length());
+				result += fmt.format(format, n, n).take().length();
 			}
 		}
 		return result;
@@ -60,12 +58,10 @@ import junit.framework.Assert;
 		int result = 0;
 		final String format = formatType.delegatingFormat;
 		if (format==null) throw new SkipThisScenarioException();
-		final StringBuilder sb = new StringBuilder();
-		final Fmt fmt = context.fmt(sb);
+		final Fmt fmt = context.fmt();
 		while (reps-->0) {
 			for (final Object n : objects) {
-				result += fmt.format(format, n, n).toString().length();
-				sb.delete(0, sb.length());
+				result += fmt.format(format, n, n).take().length();
 			}
 		}
 		return result;

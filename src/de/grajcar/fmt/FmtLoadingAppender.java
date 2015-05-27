@@ -1,6 +1,5 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -24,7 +23,7 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 		throw throwBugException(key);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		throw throwBugException(subject);
 	}
 

@@ -1,6 +1,5 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -27,7 +26,7 @@ final class FmtMultiAppender extends FmtAppender {
 			return this;
 		}
 
-		@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			final Object[] details = {
 					"specifier=" + key.specifier(),
 					"subjectClass=" + key.subjectClass().getName(),
@@ -44,7 +43,7 @@ final class FmtMultiAppender extends FmtAppender {
 			return key.specifier().equals("%") ? this : null;
 		}
 
-		@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			target.append(subject.toString());
 		}
 
@@ -61,7 +60,7 @@ final class FmtMultiAppender extends FmtAppender {
 			return new FmtStringFormatAppender(specifier);
 		}
 
-		@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			target.append(String.format(context.locale(), pattern, subject));
 		}
 
@@ -74,7 +73,7 @@ final class FmtMultiAppender extends FmtAppender {
 		return cache.getUnchecked(key);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		delegateAppender(new FmtKey("", subject.getClass())).appendTo(target, context, subject);
 	}
 

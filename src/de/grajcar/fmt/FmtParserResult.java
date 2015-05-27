@@ -1,7 +1,5 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -29,7 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 		return appender!=null;
 	}
 
-	int appendTo(Appendable target, Object subject) throws IOException {
+	int appendTo(StringBuilder target, Object subject) {
 		target.append(prefix);
 		if (appender!=null) appender.appendTo(target, context, subject);
 		return end;

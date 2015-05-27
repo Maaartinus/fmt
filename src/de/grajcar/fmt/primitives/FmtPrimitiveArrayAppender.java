@@ -1,7 +1,5 @@
 package de.grajcar.fmt.primitives;
 
-import java.io.IOException;
-
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,7 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		return withComponentAppender(componentAppender);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		final boolean packed = componentAppender.options().padded();
 		if (!packed) target.append('[');
 		if (subject.getClass().getComponentType().isPrimitive()) {
@@ -39,7 +37,7 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		if (!packed) target.append(']');
 	}
 
-	private void primitiveAppendTo(Appendable target, Object subject, FmtContext context) throws IOException {
+	private void primitiveAppendTo(StringBuilder target, Object subject, FmtContext context) {
 		final boolean packed = componentAppender.options().padded();
 		boolean addComma = false;
 		if (subject instanceof byte[]) {
@@ -95,7 +93,7 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		}
 	}
 
-	private void wrapperAppendTo(Appendable target, Object subject, FmtContext context) throws IOException {
+	private void wrapperAppendTo(StringBuilder target, Object subject, FmtContext context) {
 		final boolean packed = componentAppender.options().padded();
 		boolean addComma = false;
 		if (isIntLikeArray(subject)) {

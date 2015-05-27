@@ -127,8 +127,7 @@ public final class _FmtTest extends TestCase {
 
 	private void check(String expected, String format, Object... args) {
 		for (int i=0; i<2; ++i) {
-			final String actual = fmt.format(format, args).toString();
-			reset();
+			final String actual = fmt.format(format, args).take();
 			if (expected.equals(actual)) continue;
 			final String s = "Format \"%s\" and arguments %s\n";
 			final String msg = String.format(s, format, args==null ? "null" : Arrays.asList(args));
@@ -140,8 +139,7 @@ public final class _FmtTest extends TestCase {
 			Class<? extends Exception> expectedExceptionClass,
 			String format, Object... args) {
 		for (int i=0; i<2; ++i) {
-			final String actual = fmt.format(format, args).toString();
-			reset();
+			final String actual = fmt.format(format, args).take();
 			final List<String> msg = Lists.newArrayList();
 			if (!actual.startsWith(expectedStart)) msg.add("- doesn't start with \"" + expectedStart + "\"");
 			if (!actual.endsWith(expectedEnd)) msg.add("- doesn't end with \"" + expectedEnd + "\"");
@@ -157,18 +155,12 @@ public final class _FmtTest extends TestCase {
 		}
 	}
 
-	private void reset() {
-		sb.delete(0, sb.length());
-	}
-
 	private static final String SOME_MESSAGE = "someMessage";
-
-	private final StringBuilder sb = new StringBuilder();
 
 	private final FmtContext context =
 			FmtContext.newPoorContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_VERBOSE);
-	private final Fmt poorFmt = context.fmt(sb);
-	private final Fmt richFmt = context.withPrependedAppenders(FmtLoadingAppender.INSTANCE).fmt(sb);
+	private final Fmt poorFmt = context.fmt();
+	private final Fmt richFmt = context.withPrependedAppenders(FmtLoadingAppender.INSTANCE).fmt();
 
 	private Fmt fmt = poorFmt;
 }

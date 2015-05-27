@@ -1,7 +1,5 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -31,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 	@Nullable public abstract FmtAppender delegateAppender(FmtKey key);
 
 	/** Append formatted {@code subject} to {@code target}. */
-	public abstract void appendTo(Appendable target, FmtContext context, Object subject) throws IOException;
+	public abstract void appendTo(StringBuilder target, FmtContext context, Object subject);
 
 	/**
 	 * Return a string describing all formats usable with the given subject.

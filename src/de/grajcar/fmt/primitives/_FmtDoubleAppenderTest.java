@@ -1,6 +1,5 @@
 package de.grajcar.fmt.primitives;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import junit.framework.TestCase;
@@ -15,7 +14,7 @@ public final class _FmtDoubleAppenderTest extends TestCase {
 		assertNull(newAppender("x")); //TODO
 	}
 
-	public void testAppendTo() throws IOException {
+	public void testAppendTo() {
 		checkAppendTo("100.0", 100);
 		checkAppendTo("3.14", 3.14);
 	}
@@ -30,7 +29,7 @@ public final class _FmtDoubleAppenderTest extends TestCase {
 		check("-1,000000e+02", "%e", -100f);
 	}
 
-	private void checkAppendTo(String expected, double subject) throws IOException {
+	private void checkAppendTo(String expected, double subject) {
 		final StringBuilder sb = new StringBuilder();
 		newAppender("").appendTo(sb, context, subject);
 		assertEquals(expected, sb.toString());

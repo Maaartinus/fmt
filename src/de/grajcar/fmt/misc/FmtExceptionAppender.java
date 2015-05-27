@@ -1,6 +1,5 @@
 package de.grajcar.fmt.misc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +28,17 @@ import de.grajcar.fmt.FmtKey;
 		return new FmtExceptionAppender(specifier);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		appendTo(target, (Throwable) subject);
 	}
 
-	private void appendTo(Appendable target, Throwable e) throws IOException {
+	private void appendTo(StringBuilder target, Throwable e) {
 		final List<Throwable> list = new ArrayList<Throwable>();
 		for (Throwable e1=e; e1!=null; e1=e1.getCause()) list.add(e1);
 		appendTo(target, list);
 	}
 
-	private void appendTo(Appendable target, List<Throwable> list) throws IOException {
+	private void appendTo(StringBuilder target, List<Throwable> list) {
 		final List<StackTraceElement[]> traces = new ArrayList<StackTraceElement[]>(list.size()+2);
 		for (final Throwable e : list) traces.add(e.getStackTrace());
 		for (int i=0; i<list.size(); ++i) {
@@ -58,7 +57,7 @@ import de.grajcar.fmt.FmtKey;
 		}
 	}
 
-	private void appendTo(Appendable target, StackTraceElement[] trace, @Nullable StackTraceElement[] otherTrace) throws IOException {
+	private void appendTo(StringBuilder target, StackTraceElement[] trace, @Nullable StackTraceElement[] otherTrace) {
 		final int commonLength = commonLength(trace, otherTrace);
 		for (int i=0; i<trace.length-commonLength; ++i) {
 			target.append("\tat ").append(trace[i].toString()).append('\n');

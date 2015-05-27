@@ -1,18 +1,16 @@
 package de.grajcar.fmt;
 
-import java.io.IOException;
-
 import junit.framework.TestCase;
 
 @SuppressWarnings("boxing") public final class _FmtMultiAppenderTest extends TestCase {
-	public void test_fallback() throws IOException {
+	public void test_fallback() {
 		check("5", "", 5);
 		check("5", "%", 5);
 		check("toString", "", OBJECT);
 		check("toString", "%", OBJECT);
 	}
 
-	public void test_fallback_when_unhandled() throws IOException {
+	public void test_fallback_when_unhandled() {
 		final Object subject = OBJECT;
 		final FmtAppender delegateAppender = poorAppender.delegateAppender(new FmtKey("qaz", subject.getClass()));
 		assertNotNull(delegateAppender);
@@ -22,7 +20,7 @@ import junit.framework.TestCase;
 		assertTrue(sb.toString().contains(FmtError.NO_SUCH_APPENDER.toString()));
 	}
 
-	private void check(String expected, String format, Object subject) throws IOException {
+	private void check(String expected, String format, Object subject) {
 		final FmtAppender delegateAppender = poorAppender.delegateAppender(new FmtKey(format, subject.getClass()));
 		assertNotNull(delegateAppender);
 		final StringBuilder sb = new StringBuilder();

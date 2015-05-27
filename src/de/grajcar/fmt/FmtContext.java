@@ -3,7 +3,6 @@ package de.grajcar.fmt;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +35,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 			return matches(key) ? delegateAppender : null;
 		}
 
-		@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			delegateAppender.appendTo(target, context, subject);
 		}
 
@@ -70,7 +69,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 
 	/** Return a new {@link Fmt} writing to the specified target appendable. */
 	public Fmt fmt(Appendable target) {
-		return buffered ? new Fmt(this, new StringBuilder(), target) : new Fmt(this, target, null);
+		return new Fmt(this, new StringBuilder(), target);
 	}
 
 	/**
@@ -78,7 +77,8 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 	 * The produced formatted String can be obtained via {@link Fmt#take()} or {@link Fmt#toString()}.
 	 */
 	public Fmt fmt() {
-		return fmt(new StringBuilder());
+		final StringBuilder target = new StringBuilder();
+		return new Fmt(this, target, target);
 	}
 
 	/** Return a new context by applying the given options in order. */
@@ -120,7 +120,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 		try {
 			final FmtAppender delegateAppender = appender.delegateAppender(new FmtKey("", subject.getClass()));
 			delegateAppender.appendTo(result, this, subject);
-		} catch (final RuntimeException | IOException e) {
+		} catch (final RuntimeException e) {
 			errorHandler.handleSafely(result, FmtError.EXCEPTION, e);
 		}
 		return result.toString();
@@ -145,8 +145,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 			FmtErrorHandler.ThrowingHandler.INSTANCE,
 			Locale.ENGLISH,
 			TimeZone.getDefault(),
-			"",
-			false);
+			"");
 
 	@Wither(AccessLevel.PRIVATE) @NonNull private final FmtMultiAppender appender;
 	@Wither(AccessLevel.NONE) @NonNull private final ImmutableMap<String, Supplier<? extends Object>> supplierMap;
@@ -154,5 +153,4 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 	@NonNull private final Locale locale;
 	@NonNull private final TimeZone timeZone;
 	@NonNull private final String afterEach;
-	private final boolean buffered; //TODO generalize to postprocessor
 }

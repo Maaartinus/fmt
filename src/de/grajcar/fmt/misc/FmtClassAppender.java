@@ -1,7 +1,5 @@
 package de.grajcar.fmt.misc;
 
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 
 import lombok.AccessLevel;
@@ -27,7 +25,7 @@ import de.grajcar.fmt.FmtKey;
 		return new FmtClassAppender(specifier);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		final String s = toString((Class<?>) subject, specifier);
 		target.append(s);
 	}

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import de.grajcar.fmt.FmtAppender.NullReplacement;
@@ -19,8 +20,8 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
  */
 @RequiredArgsConstructor(access=AccessLevel.PACKAGE) public final class Fmt {
 	@Override public String toString() {
-		if (target instanceof StringBuilder) return target.toString();
-		return getClass().getSimpleName() + "(" + target.toString() + ")";
+		if (target==sb) return sb.toString();
+		return getClass().getSimpleName() + "(" + sb.toString() + ")";
 	}
 
 	/**
@@ -49,9 +50,9 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
 
 	public Fmt add(String prefix, String specifier, @Nullable Object subject, String suffix) { //TODO use or remove
 		try {
-			target.append(prefix);
+			sb.append(prefix);
 			nullableAdd(specifier, subject);
-			target.append(suffix);
+			sb.append(suffix);
 			transfer();
 		} catch (final RuntimeException | IOException e) {
 			handle(FmtError.EXCEPTION, e);
@@ -68,9 +69,8 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
 	 * It's an error to call this method when a non-StringBuilder target is used.
 	 */
 	public String take() {
-		checkState(target instanceof StringBuilder, "Only allowed when the target is a StringBuilder.");
-		final String result = target.toString();
-		final StringBuilder sb = (StringBuilder) target;
+		checkState(target==sb, "Only allowed when writing directly into a StringBuilder.");
+		final String result = sb.toString();
 		sb.delete(0, sb.length());
 		return result;
 	}
@@ -83,7 +83,7 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
 			try {
 				final Class<?> subjectClass = subject.getClass();
 				final FmtParserResult result = FmtParserResult.get(format, pos, subjectClass, context);
-				result.appendTo(target, subject);
+				result.appendTo(sb, subject);
 				if (result.usesArgument()) ++index;
 				pos = result.end();
 			} catch (final FmtParser.FormatException e) {
@@ -93,7 +93,7 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
 			}
 		}
 		if (index==args.length) {
-			target.append(context.afterEach());
+			sb.append(context.afterEach());
 		} else if (index<args.length) {
 			handle(FmtError.UNUSED_ARGUMENTS, null, Arrays.asList(args).subList(index, args.length).toArray());
 		} else {
@@ -103,30 +103,29 @@ import de.grajcar.fmt.FmtParserResult.MissingArgReplacement;
 		transfer();
 	}
 
-	private void nullableAdd(String specifier, Object subject) throws IOException {
+	private void nullableAdd(String specifier, Object subject) {
 		if (subject==null) subject = FmtAppender.NullReplacement.NULL;
 		simpleAdd(specifier, subject);
 	}
 
-	private void simpleAdd(String specifier, Object subject) throws IOException {
+	private void simpleAdd(String specifier, Object subject) {
 		final FmtKey key = new FmtKey(specifier, subject.getClass());
 		final FmtAppender appender = context.appender().delegateAppender(key);
-		appender.appendTo(target, context, subject);
+		appender.appendTo(sb, context, subject);
 	}
 
 	private void transfer() throws IOException {
-		if (realTarget==null) return;
-		final StringBuilder sb = (StringBuilder) target;
-		realTarget.append(sb.toString());
+		if (target==sb) return;
+		target.append(sb.toString());
 		sb.delete(0, sb.length());
 	}
 
 	private void handle(FmtError error, Exception exception, Object... details) {
-		context.errorHandler().handleSafely(target, error, exception, details);
+		context.errorHandler().handleSafely(sb, error, exception, details);
 	}
 
-	@Getter private final FmtContext context;
-	private final Appendable target;
-	@Nullable private final Appendable realTarget;
+	@Getter @NonNull private final FmtContext context;
+	@NonNull private final StringBuilder sb;
+	@NonNull private final Appendable target;
 	private int index;
 }

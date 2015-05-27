@@ -1,6 +1,5 @@
 package de.grajcar.fmt.misc;
 
-import java.io.IOException;
 import java.util.Date;
 
 import javax.annotation.Nullable;
@@ -27,7 +26,7 @@ import de.grajcar.fmt.FmtKey;
 		return new FmtDateAppender(sdfPattern);
 	}
 
-	@Override public void appendTo(Appendable target, FmtContext context, Object subject) throws IOException {
+	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		final String cs = DateHelper.format(sdfPattern, context.locale(), context.timeZone(), (Date) subject);
 		target.append(cs);
 	}
