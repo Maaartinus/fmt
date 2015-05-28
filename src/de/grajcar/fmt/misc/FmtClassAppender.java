@@ -11,15 +11,14 @@ import de.grajcar.fmt.FmtKey;
 
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE) public final class FmtClassAppender extends FmtAppender {
 	public FmtClassAppender() {
-		this(ALLOWED_SPECIFIERS.charAt(0));
+		this(DEFAULT_SPECIFIER);
 	}
 
 	@Override @Nullable public FmtAppender delegateAppender(FmtKey key) {
 		if (key.subjectClass() != Class.class) return null;
 		final String specifierString = key.specifier();
-		if (specifierString.isEmpty()) return this;
 		if (specifierString.length() > 1) return null;
-		final char specifier = specifierString.charAt(0);
+		final char specifier = specifierString.isEmpty() ? DEFAULT_SPECIFIER : specifierString.charAt(0);
 		if (specifier == this.specifier) return this;
 		if (ALLOWED_SPECIFIERS.indexOf(specifier) == -1) return null;
 		return new FmtClassAppender(specifier);
@@ -51,6 +50,7 @@ import de.grajcar.fmt.FmtKey;
 	}
 
 	private static final String ALLOWED_SPECIFIERS = "lnsc";
+	private static final char DEFAULT_SPECIFIER = ALLOWED_SPECIFIERS.charAt(0);
 
 	private final char specifier;
 }

@@ -7,7 +7,7 @@ import com.google.common.collect.Iterables;
 import junit.framework.TestCase;
 
 import de.grajcar.fmt.misc.FmtDateAppender;
-import de.grajcar.fmt.misc.FmtExceptionAppender;
+import de.grajcar.fmt.misc.FmtThrowableAppender;
 import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 import de.grajcar.fmt.primitives.FmtPrimitiveArrayAppender;
 
@@ -31,7 +31,7 @@ public final class _FmtLoadingAppenderTest extends TestCase {
 		check(FmtDateAppender.class, java.sql.Date.class);
 		check(FmtDateAppender.class, java.sql.Time.class);
 		check(FmtDateAppender.class, java.sql.Timestamp.class);
-		check(FmtExceptionAppender.class, Throwable.class);
+		check(FmtThrowableAppender.class, Throwable.class);
 	}
 
 	private void check(Class<?> expectedAppenderClass, Class<?> subjectClass) {

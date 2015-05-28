@@ -12,20 +12,19 @@ import de.grajcar.fmt.FmtAppender;
 import de.grajcar.fmt.FmtContext;
 import de.grajcar.fmt.FmtKey;
 
-@RequiredArgsConstructor(access=AccessLevel.PRIVATE) public final class FmtExceptionAppender extends FmtAppender {
-	public FmtExceptionAppender() {
-		this(ALLOWED_SPECIFIERS.charAt(0));
+@RequiredArgsConstructor(access=AccessLevel.PRIVATE) public final class FmtThrowableAppender extends FmtAppender {
+	public FmtThrowableAppender() {
+		this(DEFAULT_SPECIFIER);
 	}
 
 	@Override @Nullable public FmtAppender delegateAppender(FmtKey key) {
 		if (!Throwable.class.isAssignableFrom(key.subjectClass())) return null;
 		final String specifierString = key.specifier();
 		if (specifierString.length() > 1) return null;
-		if (specifierString.isEmpty()) return this;
-		final char specifier = specifierString.charAt(0);
+		final char specifier = specifierString.isEmpty() ? DEFAULT_SPECIFIER : specifierString.charAt(0);
 		if (specifier == this.specifier) return this;
 		if (ALLOWED_SPECIFIERS.indexOf(specifier) == -1) return null;
-		return new FmtExceptionAppender(specifier);
+		return new FmtThrowableAppender(specifier);
 	}
 
 	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
@@ -78,6 +77,7 @@ import de.grajcar.fmt.FmtKey;
 	}
 
 	private static final String ALLOWED_SPECIFIERS = "nl";
+	private static final char DEFAULT_SPECIFIER = ALLOWED_SPECIFIERS.charAt(0);
 
 	private final char specifier;
 }

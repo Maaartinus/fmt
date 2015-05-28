@@ -5,12 +5,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import javax.annotation.Nullable;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableMap;
 
-@Beta // DO NOT USE
-@Getter public enum MgPrimitiveInfo {
+@RequiredArgsConstructor @Getter public enum MgPrimitiveInfo {
 	BYTE(1, byte.class, Byte.class, 'B') {
 		@Override public byte[] newArray(int length) {
 			return new byte[length];
@@ -85,13 +85,6 @@ import com.google.common.collect.ImmutableMap;
 	},
 	;
 
-	private MgPrimitiveInfo(int byteLength, Class<?> primitiveClass, Class<?> wrapperClass, char classDescriptor) {
-		this.byteLength = byteLength;
-		this.primitiveClass = primitiveClass;
-		this.wrapperClass = wrapperClass;
-		this.jvmClassDescriptor = classDescriptor;
-	}
-
 	private final static ImmutableMap<Object, MgPrimitiveInfo> map;
 	static {
 		final ImmutableMap.Builder<Object, MgPrimitiveInfo> builder = ImmutableMap.builder();
@@ -141,7 +134,7 @@ import com.google.common.collect.ImmutableMap;
 
 	/** The minimum memory requirements of the type in bytes, rounded up. */
 	private final int byteLength;
-	private final Class<?> primitiveClass;
-	private final Class<?> wrapperClass;
+	@NonNull private final Class<?> primitiveClass;
+	@NonNull private final Class<?> wrapperClass;
 	private final char jvmClassDescriptor;
 }

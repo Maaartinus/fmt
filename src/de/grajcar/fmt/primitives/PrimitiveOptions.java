@@ -1,43 +1,56 @@
 package de.grajcar.fmt.primitives;
 
-import javax.annotation.Nullable;
-
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 
-@Getter @RequiredArgsConstructor @EqualsAndHashCode @Builder(builderClassName="Builder") final class PrimitiveOptions {
-	static class Builder {
-		@Nullable PrimitiveOptions apply(String specifier) {
-			for (int i=0; i<specifier.length(); ++i) apply(specifier.charAt(i));
-			return finish();
-		}
-
-		private void apply(char c) {
-			switch (c) {
-				case 's': unsigned = false; explicitSigned = true; break;
-				case 'u': unsigned = true; explicitSigned = true; break;
-				case 'd': hex = false; break;
-				case 'x': hex = true; uppercase = false; break;
-				case 'X': hex = true; uppercase = true; break;
-				case 'p': padded = true; hex = true; break;
-				case 'j': javaSyntax = true; break;
-				default: invalid = true; break;
+@RequiredArgsConstructor @Getter @EqualsAndHashCode final class PrimitiveOptions {
+	@SuppressFBWarnings("SF_SWITCH_FALLTHROUGH") static PrimitiveOptions from(String specifier) {
+		boolean hex = false;
+		boolean decimal = false;
+		boolean unsigned = false;
+		boolean signed = false;
+		boolean uppercase = false;
+		boolean padded = false;
+		boolean javaSyntax = false;
+		for (int i=0; i<specifier.length(); ++i) {
+			switch (specifier.charAt(i)) {
+				case 'j':
+					if (javaSyntax) return null;
+					javaSyntax = true;
+					break;
+				case 's':
+					if (unsigned | signed) return null;
+					signed = true;
+					break;
+				case 'u':
+					if (unsigned | signed) return null;
+					unsigned = true;
+					break;
+				case 'p':
+					if (padded) return null;
+					padded = true;
+					break;
+				case 'd':
+					if (decimal | hex) return null;
+					decimal = true;
+					break;
+				case 'X':
+					uppercase = true;
+					//$FALL-THROUGH$
+				case 'x':
+					if (decimal | hex) return null;
+					hex = true;
+					break;
+				default: return null;
 			}
 		}
-
-		@Nullable private PrimitiveOptions finish() {
-			if (invalid) return null;
-			uppercase &= hex;
-			if (!explicitSigned) unsigned = hex;
-			return build();
-		}
-
-		private boolean invalid;
-		private boolean explicitSigned;
+		unsigned |= !signed & hex;
+		return new PrimitiveOptions(hex, unsigned, uppercase, padded, javaSyntax);
 	}
 
 	public boolean isCompatibleWith(MgPrimitiveInfo info) {

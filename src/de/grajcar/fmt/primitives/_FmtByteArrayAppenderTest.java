@@ -19,7 +19,6 @@ public final class _FmtByteArrayAppenderTest extends TestCase {
 		check("[0, 1, 1E, 64, -64]", "sX");
 		check("[0x0, 0x1, 0x1e, 0x64, 0x9c]", "jx");
 		check("[0x0, 0x1, 0x1E, 0x64, 0x9C]", "jX");
-		check("00011e649c", "p");
 		check("00011e649c", "px");
 		check("00011E649C", "pX");
 	}
@@ -27,7 +26,7 @@ public final class _FmtByteArrayAppenderTest extends TestCase {
 	public void test_wrapper() {
 		check("[0, -1]", "", new Byte[] {Byte.valueOf((byte) 0), Byte.valueOf((byte) -1)});
 		check("[0, FF]", "X", new Byte[] {Byte.valueOf((byte) 0), Byte.valueOf((byte) -1)});
-		check("00ff", "p", new Byte[] {Byte.valueOf((byte) 0), Byte.valueOf((byte) -1)});
+		check("00ff", "px", new Byte[] {Byte.valueOf((byte) 0), Byte.valueOf((byte) -1)});
 	}
 
 	private void check(String expected, String specifier) {

@@ -43,11 +43,7 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 
 	private void addMiscAppenderNameFragmentTo(List<String> result, Class<?> subjectClass) {
 		for (Class<?> cl = subjectClass; cl!=null; cl = cl.getSuperclass()) {
-			final String name = cl.getName();
-			if (!MISC_CLASS_NAMES.contains(name)) continue;
-			final String simpleName = cl.getSimpleName();
-			final String fragment = simpleName.equals("Throwable") ? "Exception" : simpleName;
-			result.add(fragment);
+			if (MISC_CLASS_NAMES.contains(cl.getName())) result.add(cl.getSimpleName());
 		}
 	}
 

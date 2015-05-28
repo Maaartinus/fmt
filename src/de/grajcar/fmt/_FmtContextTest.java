@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 		final FmtContext preferringContext = FmtContext
 				.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
 				.prefer("X", Byte.class, false)
-				.prefer("p", Long.class, false);
+				.prefer("px", Long.class, false);
 		assertEquals("fffffffffffffffe", preferringContext.stringify(-2L));
 		assertEquals("C8", preferringContext.stringify((byte) 200));
 	}

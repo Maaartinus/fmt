@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import de.grajcar.fmt.FmtContext;
 import de.grajcar.fmt.FmtOption;
 
-public final class _FmtExceptionAppenderTest extends TestCase {
+public final class _FmtThrowableAppenderTest extends TestCase {
 	public void test0() throws Exception {
 		try {
 			someMethod(2);

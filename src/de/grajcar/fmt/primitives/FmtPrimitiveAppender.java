@@ -27,7 +27,7 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		result = result.withInfo(info);
 		final String specifier = key.specifier();
 		if (specifier.isEmpty()) return result;
-		final PrimitiveOptions options = PrimitiveOptions.builder().apply(specifier);
+		final PrimitiveOptions options = PrimitiveOptions.from(specifier);
 		if (options==null) return null;
 		if (!options.isCompatibleWith(info)) return null;
 		result = result.withOptions(options);
