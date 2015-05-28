@@ -31,6 +31,11 @@ import de.grajcar.fmt.FmtKey;
 		target.append(cs);
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		if (!Date.class.isAssignableFrom(subjectClass)) return "";
+		return "sdf%xxx, where xxx is defined by java.text.SimpleDateFormat.";
+	}
+
 	private static final String SDF_PREFIX = "sdf%";
 
 	private final String sdfPattern;

@@ -31,6 +31,14 @@ import de.grajcar.fmt.FmtKey;
 		appendTo(target, (Throwable) subject);
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		if (!Throwable.class.isAssignableFrom(subjectClass)) return "";
+		return ""
+		+ "l: legacy, i.e., just like printStackTrace()."
+		+ "\n"
+		+ "n: new, i.e., the root cause appears fully.";
+	}
+
 	private void appendTo(StringBuilder target, Throwable e) {
 		final List<Throwable> list = new ArrayList<Throwable>();
 		for (Throwable e1=e; e1!=null; e1=e1.getCause()) list.add(e1);
@@ -62,7 +70,10 @@ import de.grajcar.fmt.FmtKey;
 			target.append("\tat ").append(trace[i].toString()).append('\n');
 		}
 		if (commonLength==0) return;
-		target.append("\t... ").append(String.valueOf(commonLength)).append(" more").append(isLegacy() ? "" : " below").append('\n');
+		target.append("\t... ")
+		.append(String.valueOf(commonLength))
+		.append(" more").append(isLegacy() ? "" : " below")
+		.append('\n');
 	}
 
 	private int commonLength(StackTraceElement[] trace, @Nullable StackTraceElement[] otherTrace) {

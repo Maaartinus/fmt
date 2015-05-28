@@ -30,6 +30,14 @@ import de.grajcar.fmt.FmtKey;
 		}
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		if (!CharSequence.class.isAssignableFrom(subjectClass)) return "";
+		return ""
+		+ "n: normal, i.e., using toString"
+		+ "\n"
+		+ "j: javaSyntax, i.e., enclose in quotes and escape special chars so that the output is a valid string";
+	}
+
 	private void appendToWithJavaSyntax(StringBuilder target, Object subject) {
 		final String s = subject.toString();
 		target.append('"');

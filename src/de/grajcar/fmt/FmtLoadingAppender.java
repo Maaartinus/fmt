@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import com.google.common.base.Joiner;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -20,11 +21,21 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE) final class FmtLoadingAppender extends FmtAppender {
 	@Override public FmtAppender delegateAppender(FmtKey key) {
-		throw throwBugException(key);
+		throw throwBugException(key); //TODO FmtLoadingAppender should handle delegation itself
 	}
 
 	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 		throw throwBugException(subject);
+	}
+
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		final ImmutableList<FmtAppender> appenders = appenders(subjectClass);
+		final List<String> result = Lists.newArrayList();
+		for (final FmtAppender a : appenders) {
+			final String s = a.helpOnFormatsFor(subjectClass);
+			if (!s.isEmpty()) result.add(s);
+		}
+		return Joiner.on("\n\n").join(result);
 	}
 
 	ImmutableList<FmtAppender> appenders(Class<?> subjectClass) {

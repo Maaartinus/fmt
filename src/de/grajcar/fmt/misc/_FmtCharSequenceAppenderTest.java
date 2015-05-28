@@ -1,11 +1,11 @@
 package de.grajcar.fmt.misc;
 
+import junit.framework.TestCase;
+
 import de.grajcar.fmt.FmtAppender;
 import de.grajcar.fmt.FmtContext;
 import de.grajcar.fmt.FmtKey;
 import de.grajcar.fmt.FmtOption;
-
-import junit.framework.TestCase;
 
 public class _FmtCharSequenceAppenderTest extends TestCase {
 	public void testNormal() {

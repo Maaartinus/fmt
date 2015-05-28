@@ -37,12 +37,12 @@ import lombok.RequiredArgsConstructor;
 	 * <p>The result is meant for helping users.
 	 * As the number of such formats is possibly unlimited and possibly hard to describe using an regex,
 	 * a simple human-readable form is used.
+	 *
+	 * @return A human-readable description of accepted format strings, if any, the empty string otherwise.
 	 */
-	public String helpOnFormatsFor(Object subject) {
-		return "?"; //TODO make helpOnFormatsFor abstract
-	}
+	public abstract String helpOnFormatsFor(Class<?> subjectClass);
 
-	protected RuntimeException throwBugException(Object subject) {
+	protected final RuntimeException throwBugException(Object subject) {
 		throw FmtException.throwBugException(subject);
 	}
 }

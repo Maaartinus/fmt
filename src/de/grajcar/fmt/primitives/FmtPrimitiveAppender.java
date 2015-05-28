@@ -48,6 +48,28 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		}
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		final MgPrimitiveInfo info = MgPrimitiveInfo.of(subjectClass);
+		if (info==null) return "";
+		return ""
+		+"a combination of jsupdxX:"
+		+ "\n"
+		+ "j: javaSyntax"
+		+ "\n"
+		+ "s: signed"
+		+ "\n"
+		+ "u: unsigned"
+		+ "\n"
+		+ "p: padded"
+		+ "\n"
+		+ "d: decimal"
+		+ "\n"
+		+ "x: hexadecimal lowercase"
+		+ "\n"
+		+ "X: hexadecimal uppercase"
+		+ "";
+	}
+
 	final void appendTo(StringBuilder target, FmtContext context, long subject) {
 		assert Integer.bitCount(info.byteLength()) == 1;
 		if (options.unsigned() && info.byteLength()<8) subject &= ~(-1L << (8*info.byteLength()));

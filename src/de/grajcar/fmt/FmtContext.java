@@ -32,22 +32,28 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 @Immutable @Value @Wither public final class FmtContext {
 	@RequiredArgsConstructor private static class FmtRestrictedAppender extends FmtAppender {
 		@Override public FmtAppender delegateAppender(FmtKey key) {
-			return matches(key) ? delegateAppender : null;
+			if (!matches(key.subjectClass())) return null;
+			return delegateAppender.delegateAppender(key);
 		}
 
 		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			delegateAppender.appendTo(target, context, subject);
 		}
 
-		private boolean matches(FmtKey key) {
-			if (subjectClass==key.subjectClass()) return true;
-			if (!acceptSubclasses) return false;
-			return subjectClass.isAssignableFrom(key.subjectClass());
+		@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+			if (!matches(subjectClass)) return "";
+			return delegateAppender.helpOnFormatsFor(subjectClass);
 		}
 
-		private final Class<?> subjectClass;
+		private boolean matches(Class<?> subjectClass) {
+			if (subjectClass==this.subjectClass) return true;
+			if (!acceptSubclasses) return false;
+			return this.subjectClass.isAssignableFrom(subjectClass);
+		}
+
+		@NonNull private final Class<?> subjectClass;
 		private final boolean acceptSubclasses;
-		private final FmtAppender delegateAppender;
+		@NonNull private final FmtAppender delegateAppender;
 	}
 
 	/**

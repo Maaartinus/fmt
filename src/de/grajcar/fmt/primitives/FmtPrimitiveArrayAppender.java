@@ -37,6 +37,12 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		if (!packed) target.append(']');
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		final Class<?> componentClass = subjectClass.getComponentType();
+		if (componentClass==null) return "";
+		return new FmtPrimitiveAppender().helpOnFormatsFor(componentClass);
+	}
+
 	private void primitiveAppendTo(StringBuilder target, Object subject, FmtContext context) {
 		final boolean packed = componentAppender.options().padded();
 		boolean addComma = false;

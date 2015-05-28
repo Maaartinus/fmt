@@ -1,11 +1,13 @@
 package de.grajcar.fmt;
 
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
+import com.google.common.base.Joiner;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -13,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * This class is the engine reponsible for quickly finding and caching the proper appender for the given {@link FmtKey}.
@@ -35,6 +38,10 @@ final class FmtMultiAppender extends FmtAppender {
 			context.errorHandler().handleSafely(target, FmtError.NO_SUCH_APPENDER, null, details);
 		}
 
+		@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+			return "";
+		}
+
 		private final FmtKey key;
 	}
 
@@ -45,6 +52,10 @@ final class FmtMultiAppender extends FmtAppender {
 
 		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
 			target.append(subject.toString());
+		}
+
+		@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+			return "%, formats the subject using its toString";
 		}
 
 		private static final FmtAppender INSTANCE = new FmtToStringAppender();
@@ -64,6 +75,10 @@ final class FmtMultiAppender extends FmtAppender {
 			target.append(String.format(context.locale(), pattern, subject));
 		}
 
+		@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+			return "%xxx, where xxx is a format specifier of String.format";
+		}
+
 		private static final FmtAppender INSTANCE = new FmtStringFormatAppender("%s");
 
 		private final String pattern;
@@ -77,7 +92,20 @@ final class FmtMultiAppender extends FmtAppender {
 		delegateAppender(new FmtKey("", subject.getClass())).appendTo(target, context, subject);
 	}
 
-	FmtMultiAppender withPrepended(List<FmtAppender> appenders) {
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		final List<String> result = Lists.newArrayList();
+		for (final FmtAppender a : appenders) {
+			final String s = a.helpOnFormatsFor(subjectClass);
+			if (!s.isEmpty()) result.add(s);
+		}
+		return Joiner.on("\n\n").join(result);
+	}
+
+	FmtMultiAppender withPrepended(FmtAppender... appenders) {
+		return withPrepended(Arrays.asList(appenders));
+	}
+
+	FmtMultiAppender withPrepended(List<? extends FmtAppender> appenders) {
 		if (appenders.isEmpty()) return this;
 		final ImmutableList.Builder<FmtAppender> builder = ImmutableList.builder();
 		for (final FmtAppender a : Iterables.concat(appenders, this.appenders)) {

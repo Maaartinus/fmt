@@ -1,5 +1,7 @@
 package de.grajcar.fmt;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 @SuppressWarnings("boxing") public final class _FmtMultiAppenderTest extends TestCase {
@@ -20,6 +22,19 @@ import junit.framework.TestCase;
 		assertTrue(sb.toString().contains(FmtError.NO_SUCH_APPENDER.toString()));
 	}
 
+	public void testHelpOnFormatsFor_Integer() {
+		final String help = richAppender.helpOnFormatsFor(Integer.class);
+		assertTrue(help.contains("unsigned"));
+		assertTrue(help.contains("toString"));
+		assertEquals(help, richAppender.helpOnFormatsFor(int.class));
+	}
+
+	public void testHelpOnFormatsFor_Date() {
+		final String help = richAppender.helpOnFormatsFor(Date.class);
+		assertTrue(help.contains("sdf%xxx"));
+		assertTrue(help.contains("toString"));
+	}
+
 	private void check(String expected, String format, Object subject) {
 		final FmtAppender delegateAppender = poorAppender.delegateAppender(new FmtKey(format, subject.getClass()));
 		assertNotNull(delegateAppender);
@@ -29,6 +44,7 @@ import junit.framework.TestCase;
 	}
 
 	private static final FmtMultiAppender poorAppender = FmtMultiAppender.POOR;
+	private final FmtMultiAppender richAppender = poorAppender.withPrepended(FmtLoadingAppender.INSTANCE);
 
 	private static final Object OBJECT = new Object() {
 		@Override public String toString() {

@@ -29,6 +29,18 @@ import de.grajcar.fmt.FmtKey;
 		target.append(s);
 	}
 
+	@Override public String helpOnFormatsFor(Class<?> subjectClass) {
+		if (!CharSequence.class.isAssignableFrom(subjectClass)) return "";
+		return ""
+		+ "n: normal, i.e., using getName()"
+		+ "\n"
+		+ "s: simple, i.e., using getSimpleName()"
+		+ "\n"
+		+ "c: canonical, i.e., using getCanonicalName()"
+		+ "\n"
+		+ "l: local, i.e., using the getName() stripped of the package name";
+	}
+
 	private String toString(Class<?> subject, char c) {
 		switch (c) {
 			case 'n': return subject.getName();
