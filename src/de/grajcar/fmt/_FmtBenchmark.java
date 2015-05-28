@@ -28,6 +28,7 @@ import junit.framework.Assert;
 	}
 
 	public static void main(String[] args) {
+		new _FmtBenchmark().test();
 		CaliperMain.main(_FmtBenchmark.class, args);
 	}
 
@@ -161,23 +162,25 @@ import junit.framework.Assert;
 			case PLAIN: objects = bytes; break;
 			case DATE: objects = dates; break;
 		}
-		test();
 	}
 
 	private void test() {
-		final Object[] args = {(byte) 12, (byte) -34};
-		for (final FormatType ft : FormatType.values()) {
-			if (ft == FormatType.DATE) continue;
-			final String expected = String.format(ft.sfFormat, args);
-			final String actual = context.fmt().format(ft.fmtFormat, args).toString();
-			final String delegated = context.fmt().format(ft.delegatingFormat, args).toString();
-			Assert.assertEquals(expected, delegated);
-			Assert.assertEquals(expected, actual);
+		for (final FormatType t : FormatType.values()) {
+			formatType = t;
+			setup();
+			for (final Object n : objects) {
+				final String expected = String.format(t.sfFormat, n, n);
+				final String actual = context.fmt().format(t.fmtFormat, n, n).toString();
+				Assert.assertEquals(expected, actual);
+
+				if (t == FormatType.DATE) continue;
+				final String delegated = context.fmt().format(t.delegatingFormat, n, n).toString();
+				Assert.assertEquals(expected, delegated);
+			}
 		}
 	}
 
-	@Param
-	private FormatType formatType;
+	@Param private FormatType formatType;
 
 	private Object[] objects;
 	private final Object[] bytes = new Object[100];
