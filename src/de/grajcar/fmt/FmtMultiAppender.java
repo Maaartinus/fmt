@@ -121,17 +121,8 @@ final class FmtMultiAppender extends FmtAppender {
 
 	private FmtAppender load(FmtKey key) {
 		for (final FmtAppender a : appenders) {
-			if (a instanceof FmtLoadingAppender) {
-				final FmtLoadingAppender loadingAppender = (FmtLoadingAppender) a;
-				final ImmutableList<FmtAppender> appenders2 = loadingAppender.appenders(key.subjectClass());
-				for (final FmtAppender a2 : appenders2) {
-					final FmtAppender delegateAppender = a2.delegateAppender(key);
-					if (delegateAppender!=null) return delegateAppender;
-				}
-			} else {
-				final FmtAppender delegateAppender = a.delegateAppender(key);
-				if (delegateAppender!=null) return delegateAppender;
-			}
+			final FmtAppender delegateAppender = a.delegateAppender(key);
+			if (delegateAppender!=null) return delegateAppender;
 		}
 		return key.specifier().isEmpty() ? FmtToStringAppender.INSTANCE : new FmtFallbackAppender(key);
 	}

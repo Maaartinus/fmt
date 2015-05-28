@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -21,7 +22,12 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE) final class FmtLoadingAppender extends FmtAppender {
 	@Override public FmtAppender delegateAppender(FmtKey key) {
-		throw throwBugException(key); //TODO FmtLoadingAppender should handle delegation itself
+		final ImmutableList<FmtAppender> appenders = appenders(key.subjectClass());
+		for (final FmtAppender a : appenders) {
+			final FmtAppender delegateAppender = a.delegateAppender(key);
+			if (delegateAppender!=null) return delegateAppender;
+		}
+		return null;
 	}
 
 	@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
@@ -38,7 +44,7 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 		return Joiner.on("\n\n").join(result);
 	}
 
-	ImmutableList<FmtAppender> appenders(Class<?> subjectClass) {
+	@VisibleForTesting ImmutableList<FmtAppender> appenders(Class<?> subjectClass) {
 		return cache.getUnchecked(subjectClass);
 	}
 
