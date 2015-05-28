@@ -77,6 +77,7 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 	private static final ImmutableSet<String> MISC_CLASS_NAMES = ImmutableSet.of(
 			"java.util.Date",
 			"java.lang.Throwable",
+			"java.lang.CharSequence",
 			"java.lang.Class"
 			);
 
