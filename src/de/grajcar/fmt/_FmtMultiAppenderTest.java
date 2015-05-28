@@ -1,6 +1,7 @@
 package de.grajcar.fmt;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
@@ -33,6 +34,16 @@ import junit.framework.TestCase;
 		final String help = richAppender.helpOnFormatsFor(Date.class);
 		assertTrue(help.contains("sdf%xxx"));
 		assertTrue(help.contains("toString"));
+	}
+
+	public void testHelpOnFormatsFor_Iterable() {
+		final String help = richAppender.helpOnFormatsFor(Iterable.class);
+		assertTrue(help.contains("as if it was a list"));
+	}
+
+	public void testHelpOnFormatsFor_Iterator() {
+		final String help = richAppender.helpOnFormatsFor(Iterator.class);
+		assertTrue(help.contains("as if it was a list"));
 	}
 
 	private void check(String expected, String format, Object subject) {

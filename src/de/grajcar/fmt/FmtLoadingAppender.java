@@ -89,6 +89,8 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 			"java.util.Date",
 			"java.lang.Throwable",
 			"java.lang.CharSequence",
+			"java.util.Iterator",
+			"java.lang.Iterable",
 			"java.lang.Class"
 			);
 
