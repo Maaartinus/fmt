@@ -9,7 +9,8 @@ import de.grajcar.fmt.FmtKey;
 public class FmtIteratorAppender extends FmtAppender {
 	@Override public FmtAppender delegateAppender(FmtKey key) {
 		if (!Iterator.class.isAssignableFrom(key.subjectClass())) return null;
-		if (!key.specifier().equals("n")) return null;
+		final String specifier = key.specifier();
+		if (!specifier.isEmpty() && !specifier.equals("n")) return null;
 		return this;
 	}
 

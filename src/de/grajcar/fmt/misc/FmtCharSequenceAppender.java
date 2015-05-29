@@ -55,7 +55,7 @@ import de.grajcar.fmt.FmtKey;
 
 	private String escape(char c) {
 		switch (c) {
-			case '"': return "\\\"";
+			case '\"': return "\\\"";
 			case '\\': return "\\\\";
 			case '\n': return "\\n";
 			case '\r': return "\\r";

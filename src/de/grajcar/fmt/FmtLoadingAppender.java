@@ -1,6 +1,7 @@
 package de.grajcar.fmt;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
@@ -51,17 +53,27 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 	private ImmutableList<FmtAppender> load(Class<?> subjectClass) {
 		if (isPrimitiveOrWrapper(subjectClass)) return primitiveAppenders(subjectClass, false);
 		if (subjectClass.isArray()) return arrayAppenders(subjectClass);
-		final List<String> fragments = Lists.newArrayList();
-		addMiscAppenderNameFragmentTo(fragments, subjectClass);
+
+
 		final ImmutableList.Builder<FmtAppender> result = ImmutableList.builder();
-		for (final String s : fragments) result.add(loadAppender(MISC_PACKAGE_NAME, s));
+		for (final String s : supertypeSimpleNames(subjectClass)) result.add(loadAppender(MISC_PACKAGE_NAME, s));
 		return result.build();
 	}
 
-	private void addMiscAppenderNameFragmentTo(List<String> result, Class<?> subjectClass) {
+	private List<String> supertypeSimpleNames(Class<?> subjectClass) {
+		final Map<String, String> nameToSimpleName = Maps.newHashMap();
 		for (Class<?> cl = subjectClass; cl!=null; cl = cl.getSuperclass()) {
-			if (MISC_CLASS_NAMES.contains(cl.getName())) result.add(cl.getSimpleName());
+			if (MISC_CLASS_NAMES.contains(cl.getName())) nameToSimpleName.put(cl.getName(), cl.getSimpleName());
+			for (final Class<?> ci : cl.getInterfaces()) {
+				if (MISC_CLASS_NAMES.contains(ci.getName())) nameToSimpleName.put(ci.getName(), ci.getSimpleName());
+			}
 		}
+		final List<String> result = Lists.newArrayList();
+		for (final String s : MISC_CLASS_NAMES) {
+			final String simpleName = nameToSimpleName.get(s);
+			if (simpleName!=null) result.add(simpleName);
+		}
+		return result;
 	}
 
 	private ImmutableList<FmtAppender> arrayAppenders(Class<?> subjectClass) {
@@ -91,6 +103,11 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 		}
 	}
 
+	/**
+	 * Intentionally using class names in order not to force class loading.
+	 *
+	 * <p>The order is significant as e.g. SQLException is both @ {@link Throwable} amd (@link Iterable<Throwable>}.
+	 */
 	private static final ImmutableSet<String> MISC_CLASS_NAMES = ImmutableSet.of(
 			"java.util.Date",
 			"java.lang.Throwable",
