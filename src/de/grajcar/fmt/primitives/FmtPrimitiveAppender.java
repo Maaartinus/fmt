@@ -54,6 +54,9 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		return ""
 		+"a combination of jsupdxX:"
 		+ "\n"
+		+ "_: separated: separate groups of 6 decimal or 8 hexadecimal digits by underscores;"
+		+ " repeating this option leads to separating groups of 3 decimal or 4 hexadecimal digits"
+		+ "\n"
 		+ "j: javaSyntax"
 		+ "\n"
 		+ "s: signed"
@@ -71,18 +74,91 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 	}
 
 	final void appendTo(StringBuilder target, FmtContext context, long subject) {
-		assert Integer.bitCount(info.byteLength()) == 1;
 		if (options.unsigned() && info.byteLength()<8) subject &= ~(-1L << (8*info.byteLength()));
 		if (options.hex()) {
 			hexAppendTo(target, subject);
 		} else {
-			if (subject>=0 || !options.unsigned()) {
+			if (options.separated() > 0) {
+				appendSeparatedTo(target, subject);
+			} else if (subject>=0 || !options.unsigned()) {
 				target.append(subject);
 			} else {
 				final long tenth = (subject>>>1) / 5;
 				target.append(tenth);
 				target.append(LOWERCASE_HEX[(int) (subject - 10*tenth)]);
 			}
+		}
+	}
+
+	private void appendSeparatedTo(StringBuilder target, long subject) {
+		boolean started = false;
+		if (subject >= MILLION_TO_3) {
+			final long x = subject / MILLION_TO_3;
+			target.append(x);
+			subject -= x * MILLION_TO_3;
+			started = true;
+		} else if (subject>=0) {
+			// nothing to do
+		} else if (options.unsigned()) {
+			final long x = (subject >>> 1) / (MILLION_TO_3/2);
+			target.append(x);
+			subject -= x * MILLION_TO_3;
+			started = true;
+		} else if (subject <= -MILLION_TO_3) {
+			final long x = subject / MILLION_TO_3;
+			target.append(x);
+			subject -= x * MILLION_TO_3;
+			subject = -subject;
+			started = true;
+		} else {
+			target.append('-');
+			subject = -subject;
+		}
+		assert 0 <= subject && subject < MILLION_TO_3;
+
+		if (subject > MILLION_TO_2) {
+			final int x = (int) (subject / MILLION_TO_2);
+			appendBelowMillionTo(target, started, x);
+			subject -= MILLION_TO_2 * x;
+			started = true;
+		}
+		if (subject > MILLION_TO_1) {
+			final int x = (int) (subject / MILLION_TO_1);
+			appendBelowMillionTo(target, started, x);
+			subject -= MILLION_TO_1 * x;
+			started = true;
+		}
+		appendBelowMillionTo(target, started, (int) subject);
+	}
+
+	private void appendBelowMillionTo(StringBuilder target, boolean started, int subject) {
+		assert 0 <= subject && subject < MILLION_TO_1;
+		assert options.separated() > 0;
+		final int x = subject / 1000;
+		if (started) target.append('_');
+		appendBelowThousandTo(target, started, x);
+		if (x>0) {
+			if (options.separated() == 2) target.append('_');
+			subject -= 1000 * x;
+			started = true;
+		} else if (started) {
+			if (options.separated() == 2) target.append('_');
+		}
+		appendBelowThousandTo(target, started, subject);
+	}
+
+	private void appendBelowThousandTo(StringBuilder target, boolean started, int subject) {
+		assert 0 <= subject && subject < 1000;
+		if (subject >= 100) {
+			target.append(subject);
+		} else if (subject >= 10) {
+			if (started) target.append("0");
+			target.append(subject);
+		} else if (subject >= 1) {
+			if (started) target.append("00");
+			target.append(subject);
+		} else {
+			if (started) target.append("000");
 		}
 	}
 
@@ -102,16 +178,18 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 		final boolean isNegative = subject<0;
 		if (isNegative && !options.unsigned()) {
 			target.append('-');
-			subject =- subject;
+			subject = -subject;
 		}
 		if (options.javaSyntax()) target.append("0x");
 		final char[] hex = options.uppercase() ? UPPERCASE_HEX : LOWERCASE_HEX;
 		boolean nonZero = false;
+		final int positionMask = options.separated() == 2 ? 3 : options.separated() == 1 ? 7 : -1;
 		for (int pos=2*info.byteLength(); pos-->0; ) {
 			final char hexDigit = hexDigit(hex, subject, pos);
 			if (nonZero || hexDigit != '0') {
 				nonZero = true;
 				target.append(hexDigit);
+				if ((pos&positionMask) == 0 && pos > 0) target.append('_');
 			} else if (pos==0 | options.padded()) {
 				target.append('0');
 			}
@@ -125,6 +203,10 @@ public final class FmtPrimitiveAppender extends FmtAppender {
 
 	private static final char[] LOWERCASE_HEX = "0123456789abcdef".toCharArray();
 	private static final char[] UPPERCASE_HEX = "0123456789ABCDEF".toCharArray();
+
+	private static final long MILLION_TO_1 = 1_000_000L;
+	private static final long MILLION_TO_2 = MILLION_TO_1 * MILLION_TO_1;
+	private static final long MILLION_TO_3 = MILLION_TO_1 * MILLION_TO_2;
 
 	@NonNull private final PrimitiveOptions options;
 	@NonNull private final MgPrimitiveInfo info;

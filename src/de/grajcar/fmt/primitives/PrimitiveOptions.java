@@ -17,8 +17,14 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		boolean uppercase = false;
 		boolean padded = false;
 		boolean javaSyntax = false;
+		int separated = 0;
+
 		for (int i=0; i<specifier.length(); ++i) {
 			switch (specifier.charAt(i)) {
+				case '_':
+					if (separated==2) return null;
+					++separated;
+					break;
 				case 'j':
 					if (javaSyntax) return null;
 					javaSyntax = true;
@@ -50,7 +56,7 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 			}
 		}
 		unsigned |= !signed & hex;
-		return new PrimitiveOptions(hex, unsigned, uppercase, padded, javaSyntax);
+		return new PrimitiveOptions(hex, unsigned, uppercase, padded, javaSyntax, separated);
 	}
 
 	public boolean isCompatibleWith(MgPrimitiveInfo info) {
@@ -60,11 +66,12 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 		return false;
 	}
 
-	static final PrimitiveOptions DEFAULT = new PrimitiveOptions(false, false, false, false, false);
+	static final PrimitiveOptions DEFAULT = new PrimitiveOptions(false, false, false, false, false, 0);
 
 	private final boolean hex;
 	private final boolean unsigned;
 	private final boolean uppercase;
 	private final boolean padded;
 	private final boolean javaSyntax;
+	private final int separated;
 }

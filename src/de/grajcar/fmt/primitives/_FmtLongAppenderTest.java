@@ -3,6 +3,7 @@ package de.grajcar.fmt.primitives;
 import java.math.BigInteger;
 import java.util.Random;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.math.LongMath;
 import com.google.common.primitives.UnsignedLongs;
 
@@ -78,6 +79,42 @@ import de.grajcar.fmt.FmtOption;
 		check("-100", "%s", -100);
 		check("ffffffffffffff9c", "%x", -100);
 		check("FFFFFFFFFFFFFF9C", "%04X", -100);
+	}
+
+	public void test_separated_hex() {
+		check("12345678", "_x", 0x12345678);
+		check("1_23456789", "_x", 0x123456789L);
+		check("1234_5678", "__x", 0x12345678);
+		check("1_2345_6789", "__x", 0x123456789L);
+	}
+
+	public void test_separated_decimal() {
+		check("1234", "_", 1234);
+		check("12_345678", "_", 12345678);
+		check("1_234", "__", 1234);
+		check("12_345_678", "__", 12345678);
+		check("4_793971_110569_000604", "_", 4793971110569000604L);
+	}
+
+	public void test_separated_decimal_huge() {
+		check("1_234567_890123_456789", "_", 1234567890123456789L);
+		check("9_223372_036854_775807", "_", Long.MAX_VALUE);
+		check("-9_223372_036854_775808", "_", Long.MIN_VALUE);
+		check("9_223372_036854_775808", "_u", Long.MIN_VALUE);
+		check("18_446744_073709_551615", "_u", -1);
+	}
+
+	public void test_separated_decimal_random() {
+		final CharMatcher matcher = CharMatcher.is('_');
+		final Random random = new Random(0);
+		for(int i=0; i<1000; ++i) {
+			final long value = random.nextLong();
+			final String simple = Long.toString(value);
+			final String separated1 = context.fmt().add("", "_", value).take();
+			final String separated2 = context.fmt().add("", "__", value).take();
+			assertEquals(simple, matcher.removeFrom(separated1));
+			assertEquals(simple, matcher.removeFrom(separated2));
+		}
 	}
 
 	private void check(String expected, String specifier, long value) {
