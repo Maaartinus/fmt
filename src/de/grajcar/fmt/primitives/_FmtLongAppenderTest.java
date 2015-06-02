@@ -2,6 +2,7 @@ package de.grajcar.fmt.primitives;
 
 import java.math.BigInteger;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.math.LongMath;
@@ -88,6 +89,25 @@ import de.grajcar.fmt.FmtOption;
 		check("1_2345_6789", "__x", 0x123456789L);
 	}
 
+	public void test_separated_hex_random() {
+		final CharMatcher matcher = CharMatcher.is('_');
+		final Random random = new Random(51132);
+		for(int i=0; i<1000; ++i) {
+			final boolean signed = (i&1) != 0;
+			final String signedModifier = signed ? "s" : "";
+			final long value = random.nextLong();
+			final String expected = signed ? Long.toString(value, 16) : String.format("%x", value);
+			final String separated0 = context.fmt().add("", "x" + signedModifier, value).take();
+			final String separated1 = context.fmt().add("", "_x" + signedModifier, value).take();
+			final String separated2 = context.fmt().add("", "__x" + signedModifier, value).take();
+			assertEquals(expected, separated0);
+			assertEquals(expected, matcher.removeFrom(separated1));
+			assertEquals(expected, matcher.removeFrom(separated2));
+			assertTrue(HEX1_PATTERN.matcher(separated1).matches());
+			assertTrue(HEX2_PATTERN.matcher(separated2).matches());
+		}
+	}
+
 	public void test_separated_decimal() {
 		check("1234", "_", 1234);
 		check("12_345678", "_", 12345678);
@@ -109,11 +129,15 @@ import de.grajcar.fmt.FmtOption;
 		final Random random = new Random(0);
 		for(int i=0; i<1000; ++i) {
 			final long value = random.nextLong();
-			final String simple = Long.toString(value);
+			final String expected = Long.toString(value);
+			final String separated0 = context.fmt().add("", "", value).take();
 			final String separated1 = context.fmt().add("", "_", value).take();
 			final String separated2 = context.fmt().add("", "__", value).take();
-			assertEquals(simple, matcher.removeFrom(separated1));
-			assertEquals(simple, matcher.removeFrom(separated2));
+			assertEquals(expected, separated0);
+			assertEquals(expected, matcher.removeFrom(separated1));
+			assertEquals(expected, matcher.removeFrom(separated2));
+			assertTrue(MILLIONS_PATTERN.matcher(separated1).matches());
+			assertTrue(THOUSANDS_PATTERN.matcher(separated2).matches());
 		}
 	}
 
@@ -122,4 +146,8 @@ import de.grajcar.fmt.FmtOption;
 	}
 
 	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final Pattern MILLIONS_PATTERN = Pattern.compile("-?\\d{1,6}(_\\d{6})*");
+	private static final Pattern THOUSANDS_PATTERN = Pattern.compile("-?\\d{1,3}(_\\d{3})*");
+	private static final Pattern HEX1_PATTERN = Pattern.compile("-?\\w{1,8}(_\\w{8})*");
+	private static final Pattern HEX2_PATTERN = Pattern.compile("-?\\w{1,4}(_\\w{4})*");
 }
