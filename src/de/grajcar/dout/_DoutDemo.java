@@ -11,7 +11,7 @@ public class _DoutDemo {
 	public static void main(String[] args) {
 		final FmtContext context = FmtContext
 				.newRichContext(FmtOption.LOCALIZED_NO)
-				.prefer("sdf%dd.MM.yyyy=EEE", Date.class, false);
+				.prefer("dd.MM.yyyy=EEE", Date.class, false);
 		Dout.Initializer.doutifier().context(context);
 		Dout.Initializer.useSystemOut();
 		Dout.a("STARTED");
@@ -24,7 +24,7 @@ public class _DoutDemo {
 		Dout.a(new byte[] {1, 2, 3});
 		Dout.a(new SQLException());
 		Dout.a("This is 'today' using the prespecified format:", new Date());
-		Dout.f("The answer on [sdf%yyyy-MM-dd] is still [jX].", new Date(), 42);
+		Dout.f("The answer on [yyyy-MM-dd] is still [jX].", new Date(), 42);
 		Dout.f("This is an error: [qwerty]", 42);
 	}
 }

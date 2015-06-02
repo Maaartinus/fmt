@@ -45,9 +45,9 @@ import junit.framework.TestCase;
 		final long millis = calendar.getTimeInMillis() + 123;
 		final FmtContext context = FmtContext
 				.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
-				.prefer("sdf%dd.MM.yyyy (EEE)", java.sql.Date.class, true)
-				.prefer("sdf%hh:mm:ss.SSS", java.sql.Time.class, true)
-				.prefer("sdf%yyMMdd-hhmmss", java.util.Date.class, false);
+				.prefer("dd.MM.yyyy (EEE)", java.sql.Date.class, true)
+				.prefer("hh:mm:ss.SSS", java.sql.Time.class, true)
+				.prefer("yyMMdd-hhmmss", java.util.Date.class, false);
 		assertEquals("16.09.2014 (Tue)", context.stringify(new java.sql.Date(millis)));
 		assertEquals("08:46:25.123", context.stringify(new java.sql.Time(millis)));
 		assertEquals("140916-084625", context.stringify(new java.util.Date(millis)));

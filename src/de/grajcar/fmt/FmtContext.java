@@ -105,7 +105,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 		final FmtAppender delegateAppender = appender().delegateAppender(key);
 		checkNotNull(delegateAppender);
 		final boolean ok = !(delegateAppender instanceof FmtMultiAppender.FmtFallbackAppender);
-		checkArgument(ok, "Specifier \"%s\" doesn't work with %s a", specifier, subjectClass);
+		checkArgument(ok, "No appender found for specifier \"%s\" and %s", specifier, subjectClass);
 		return withPrependedAppenders(new FmtRestrictedAppender(subjectClass, acceptSubclasses, delegateAppender));
 	}
 

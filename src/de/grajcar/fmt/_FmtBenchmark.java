@@ -19,7 +19,7 @@ import junit.framework.Assert;
 	@RequiredArgsConstructor enum FormatType {
 		PLAIN("First=[], second=[]", "First=[%s], second=[%s]", "First=%s, second=%s"),
 		HEX("First=[x], second=[pX]", "First=[%x], second=[%02X]", "First=%x, second=%02X"),
-		DATE("First=[sdf%yy-MM-dd], second=[sdf%yyyy-MM-dd]", null,
+		DATE("First=[yy-MM-dd], second=[yyyy-MM-dd]", null,
 				"First=%1$ty-%1$tm-%1$td, second=%2$tY-%2$tm-%2$td"),
 				;
 		private final String fmtFormat;

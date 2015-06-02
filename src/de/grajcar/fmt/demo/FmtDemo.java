@@ -92,7 +92,7 @@ import de.grajcar.fmt.FmtOption;
 			@Override void print() {
 				fmt.format("Now using `toString()` via [%].", now);
 				fmt.format("Now using default `SimpleDateFormat` via '[]': [].", now);
-				fmt.format("Now using `SimpleDateFormat` via '[sdf%yy-MM-dd''T''HH:mm]': [sdf%yy-MM-dd'T'HH:mm].", now);
+				fmt.format("Now using `SimpleDateFormat` via '[yy-MM-dd''T''HH:mm]': [yy-MM-dd'T'HH:mm].", now);
 				succinctFmt.format("An invalid `SimpleDateFormat` may throw or not, depending on configuraton: [sdf:xx].", now);
 				fmt.format("The `SimpleDateFormat` gets used in a thread-safe way.");
 			}

@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 
 	public void testHelpOnFormatsFor_Date() {
 		final String help = richAppender.helpOnFormatsFor(Date.class);
-		assertTrue(help.contains("sdf%xxx"));
+		assertTrue(help.contains("SimpleDateFormat"));
 		assertTrue(help.contains("toString"));
 	}
 

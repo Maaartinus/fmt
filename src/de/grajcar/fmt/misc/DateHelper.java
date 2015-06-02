@@ -32,7 +32,9 @@ final class DateHelper {
 			.maximumSize(1000)
 			.build(new CacheLoader<CacheKey, SimpleDateFormat>() {
 				@Override public SimpleDateFormat load(CacheKey key) {
-					return new SimpleDateFormat(key.format, key.locale);
+					final SimpleDateFormat result = new SimpleDateFormat(key.format, key.locale);
+					result.setTimeZone(key.timeZone);
+					return result;
 				}
 			});
 }
