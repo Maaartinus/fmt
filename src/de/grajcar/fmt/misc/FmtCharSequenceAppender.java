@@ -15,8 +15,9 @@ import de.grajcar.fmt.FmtKey;
 	@Override public FmtAppender delegateAppender(FmtKey key) {
 		if (!CharSequence.class.isAssignableFrom(key.subjectClass())) return null;
 		final String specifierString = key.specifier();
+		if (specifierString.isEmpty()) return this;
 		if (specifierString.length() > 1) return null;
-		final char specifier = specifierString.isEmpty() ? DEFAULT_SPECIFIER : specifierString.charAt(0);
+		final char specifier = specifierString.charAt(0);
 		if (specifier == this.specifier) return this;
 		if (ALLOWED_SPECIFIERS.indexOf(specifier) == -1) return null;
 		return new FmtCharSequenceAppender(specifier);

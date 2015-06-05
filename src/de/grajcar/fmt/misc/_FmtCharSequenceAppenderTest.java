@@ -2,6 +2,7 @@ package de.grajcar.fmt.misc;
 
 import junit.framework.TestCase;
 
+import de.grajcar.fmt.Fmt;
 import de.grajcar.fmt.FmtAppender;
 import de.grajcar.fmt.FmtContext;
 import de.grajcar.fmt.FmtKey;
@@ -32,6 +33,14 @@ public class _FmtCharSequenceAppenderTest extends TestCase {
 		}
 	}
 
+	public void testPreferJavaSyntax() {
+		final Fmt fmt = context.prefer("j", String.class, false).fmt();
+		for (int i=0; i<testStrings.length; i+=2) {
+			final String s = testStrings[i];
+			final String expected = testStrings[i+1];
+			assertEquals(expected, fmt.format("[]", s).take());
+		}
+	}
 
 	private final String[] testStrings = {
 			"abc", "\"abc\"",
