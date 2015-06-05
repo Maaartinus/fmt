@@ -22,6 +22,7 @@ public final class FmtDateAppender extends FmtAppender {
 		if (!Date.class.isAssignableFrom(subjectClass)) return null;
 		final Class<?> subjectClass = key.subjectClass();
 		String specifier = key.specifier();
+		if (specifier.indexOf('%') != -1) return null;
 		if (specifier.isEmpty()) {
 			if (subjectClass == this.subjectClass) return this;
 			specifier = defaultSpecifierFor(subjectClass);

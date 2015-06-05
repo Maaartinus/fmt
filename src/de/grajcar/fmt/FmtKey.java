@@ -9,7 +9,7 @@ import lombok.ToString;
 import lombok.experimental.Wither;
 
 /** The key determining what appender gets used. */
-@ToString @EqualsAndHashCode @Getter public final class FmtKey {
+@ToString @EqualsAndHashCode @Getter @Wither public final class FmtKey {
 	public FmtKey(String specifier, Class<?> subjectClass) {
 		checkArgument(!subjectClass.isPrimitive(), "Please use the wrapper class instead of %s", subjectClass);
 		this.specifier = specifier;
@@ -17,5 +17,5 @@ import lombok.experimental.Wither;
 	}
 
 	@NonNull private final String specifier;
-	@NonNull @Wither private final Class<?> subjectClass;
+	@NonNull private final Class<?> subjectClass;
 }

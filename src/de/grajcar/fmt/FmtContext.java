@@ -33,7 +33,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 	@RequiredArgsConstructor private static class FmtRestrictedAppender extends FmtAppender {
 		@Override public FmtAppender delegateAppender(FmtKey key) {
 			if (!matches(key.subjectClass())) return null;
-			return delegateAppender.delegateAppender(key);
+			return delegateAppender.delegateAppender(key.withSpecifier(specifier));
 		}
 
 		@Override public void appendTo(StringBuilder target, FmtContext context, Object subject) {
@@ -51,6 +51,7 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 			return this.subjectClass.isAssignableFrom(subjectClass);
 		}
 
+		@NonNull private final String specifier;
 		@NonNull private final Class<?> subjectClass;
 		private final boolean acceptSubclasses;
 		@NonNull private final FmtAppender delegateAppender;
@@ -106,7 +107,8 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 		checkNotNull(delegateAppender);
 		final boolean ok = !(delegateAppender instanceof FmtMultiAppender.FmtFallbackAppender);
 		checkArgument(ok, "No appender found for specifier \"%s\" and %s", specifier, subjectClass);
-		return withPrependedAppenders(new FmtRestrictedAppender(subjectClass, acceptSubclasses, delegateAppender));
+		final FmtRestrictedAppender a = new FmtRestrictedAppender(specifier, subjectClass, acceptSubclasses, delegateAppender);
+		return withPrependedAppenders(a);
 	}
 
 	/** Return a new context in which the given appenders are tried first. */

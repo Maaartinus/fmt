@@ -180,10 +180,11 @@ import junit.framework.Assert;
 		}
 	}
 
+	private final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+
 	@Param private FormatType formatType;
 
 	private Object[] objects;
 	private final Object[] bytes = new Object[100];
 	private final Object[] dates = new Object[100];
-	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }
