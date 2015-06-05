@@ -19,6 +19,7 @@ import de.grajcar.fmt.misc.FmtClassAppender;
 import de.grajcar.fmt.misc.FmtDateAppender;
 import de.grajcar.fmt.misc.FmtIterableAppender;
 import de.grajcar.fmt.misc.FmtIteratorAppender;
+import de.grajcar.fmt.misc.FmtMapAppender;
 import de.grajcar.fmt.misc.FmtThrowableAppender;
 import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 import de.grajcar.fmt.primitives.FmtPrimitiveArrayAppender;
@@ -80,6 +81,7 @@ public final class _FmtLoadingAppenderTest extends TestCase {
 			.put(FmtDateAppender.class, new Date())
 			.put(FmtIterableAppender.class, Iterables.concat(ImmutableList.of("a", "bc"), ImmutableList.of("def")))
 			.put(FmtIteratorAppender.class, ImmutableList.of("A", "BC").iterator())
+			.put(FmtMapAppender.class, ImmutableMap.of("K", "V", "K2", "V2"))
 			.put(FmtThrowableAppender.class, new SQLException("sequel"))
 			.put(FmtPrimitiveAppender.class, Long.valueOf(43))
 			.put(FmtPrimitiveArrayAppender.class, new long[] {44, 45})

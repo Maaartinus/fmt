@@ -116,6 +116,7 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 			CharSequence.class.getName(),
 			Iterator.class.getName(),
 			Iterable.class.getName(),
+			Map.class.getName(),
 			Class.class.getName()
 			);
 
