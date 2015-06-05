@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 		final FmtAppender delegateAppender = poorAppender.delegateAppender(new FmtKey("qaz", subject.getClass()));
 		assertNotNull(delegateAppender);
 		final StringBuilder sb = new StringBuilder();
-		final FmtContext context = FmtContext.newRichContext(FmtOption.ON_ERROR_VERBOSE, FmtOption.LOCALIZED_NO);
+		final FmtContext context = FmtContext.richContext(FmtOption.ON_ERROR_VERBOSE, FmtOption.LOCALIZED_NO);
 		delegateAppender.appendTo(sb, context, subject);
 		assertTrue(sb.toString().contains(FmtError.NO_SUCH_APPENDER.toString()));
 	}

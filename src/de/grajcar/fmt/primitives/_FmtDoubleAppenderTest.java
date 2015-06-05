@@ -43,6 +43,6 @@ public final class _FmtDoubleAppenderTest extends TestCase {
 		assertEquals(expected, context.fmt().add("", specifier, Double.valueOf(value)).take());
 	}
 
-	private static final FmtContext rawContext = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext rawContext = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 	private FmtContext context = rawContext;
 }

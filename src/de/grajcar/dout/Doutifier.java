@@ -211,7 +211,7 @@ import de.grajcar.fmt.FmtContext;
 	private final static Pattern formatPattern = Pattern.compile("\\[(-?[.\\d]*|[^\\[\\]]+:)([^\\[\\]:]*)]");
 	private final static long startMillis = System.currentTimeMillis();
 
-	@NonNull private FmtContext context = FmtContext.newRichContext();
+	@NonNull private FmtContext context = FmtContext.richContext();
 
 	private String beforeRecord = "[07.3f:t] ";
 	private String afterRecord = "\n";

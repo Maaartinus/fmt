@@ -45,7 +45,7 @@ public final class _FmtTest extends TestCase {
 
 	public void testFmt_throwing() {
 		final TestErrorHandler testErrorHandler = new TestErrorHandler();
-		final FmtContext context = FmtContext.newPoorContext(FmtOption.LOCALIZED_NO).withErrorHandler(testErrorHandler);
+		final FmtContext context = FmtContext.poorContext(FmtOption.LOCALIZED_NO).withErrorHandler(testErrorHandler);
 		fmt = context.fmt(new ThrowingAppendable());
 		fmt.format("a");
 		final String message = testErrorHandler.toString();
@@ -158,7 +158,7 @@ public final class _FmtTest extends TestCase {
 	private static final String SOME_MESSAGE = "someMessage";
 
 	private final FmtContext context =
-			FmtContext.newPoorContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_VERBOSE);
+			FmtContext.poorContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_VERBOSE);
 	private final Fmt poorFmt = context.fmt();
 	private final Fmt richFmt = context.withPrependedAppenders(FmtLoadingAppender.INSTANCE).fmt();
 

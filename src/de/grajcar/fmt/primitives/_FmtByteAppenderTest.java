@@ -54,5 +54,5 @@ public final class _FmtByteAppenderTest extends TestCase {
 		assertEquals(expected, context.fmt().add("", specifier, Byte.valueOf((byte) value)).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }

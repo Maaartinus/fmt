@@ -171,7 +171,7 @@ import de.grajcar.fmt.FmtOption;
 	}
 
 
-	private static final FmtContext DEMO_CONTEXT = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING)
+	private static final FmtContext DEMO_CONTEXT = FmtContext.richContext(FmtOption.ON_ERROR_THROWING)
 			.withAfterEach("\n");
 
 	private static final Fmt fmt = DEMO_CONTEXT.fmt(System.out);
@@ -180,7 +180,7 @@ import de.grajcar.fmt.FmtOption;
 	private static final Fmt verboseFmt = fmt.context()
 			.withOption(FmtOption.ON_ERROR_VERBOSE).fmt(System.out);
 
-	private static final Fmt dumbFmt = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING).
+	private static final Fmt dumbFmt = FmtContext.richContext(FmtOption.ON_ERROR_THROWING).
 			withAfterEach("\n").fmt(System.out);
 
 	private static final byte[] bytes = new byte[] {0, 100, (byte) 200};

@@ -28,5 +28,5 @@ public final class _FmtParserResultTest extends TestCase {
 	}
 
 	private final Object subject = new byte[] {1, -2};
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }

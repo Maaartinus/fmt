@@ -48,5 +48,5 @@ public class _FmtCharSequenceAppenderTest extends TestCase {
 			"\"\\", "\"\\\"\\\\\"",
 	};
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.ON_ERROR_THROWING);
 }

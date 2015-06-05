@@ -145,7 +145,7 @@ import de.grajcar.fmt.FmtOption;
 		assertEquals(expected, context.fmt().add("", specifier, value).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 	private static final Pattern MILLIONS_PATTERN = Pattern.compile("-?\\d{1,6}(_\\d{6})*");
 	private static final Pattern THOUSANDS_PATTERN = Pattern.compile("-?\\d{1,3}(_\\d{3})*");
 	private static final Pattern HEX1_PATTERN = Pattern.compile("-?\\w{1,8}(_\\w{8})*");

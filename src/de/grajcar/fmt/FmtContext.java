@@ -58,16 +58,16 @@ import de.grajcar.fmt.FmtAppender.NullReplacement;
 
 	/**
 	 * Return a new context without any predefined appenders.
-	 * You usually want to use {@link #newRichContext(FmtOption...)} instead.
+	 * You usually want to use {@link #richContext(FmtOption...)} instead.
 	 */
-	public static FmtContext newPoorContext(FmtOption... options) {
+	public static FmtContext poorContext(FmtOption... options) {
 		FmtContext result = ROOT;
 		for (final FmtOption o : options) result = o.apply(result);
 		return result;
 	}
 
 	/** Return a new context with the standard set of predefined appenders. */
-	public static FmtContext newRichContext(FmtOption... options) {
+	public static FmtContext richContext(FmtOption... options) {
 		FmtContext result = ROOT.withPrependedAppenders(FmtLoadingAppender.INSTANCE);
 		for (final FmtOption o : options) result = o.apply(result);
 		return result;

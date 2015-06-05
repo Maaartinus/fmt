@@ -55,5 +55,5 @@ public final class _FmtParserTest extends TestCase {
 	}
 
 	private final Class<?> subjectClass = getClass();
-	private final FmtContext context = FmtContext.newPoorContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private final FmtContext context = FmtContext.poorContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }

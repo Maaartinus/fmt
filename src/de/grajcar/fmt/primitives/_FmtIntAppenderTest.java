@@ -44,5 +44,5 @@ public final class _FmtIntAppenderTest extends TestCase {
 		assertEquals(expected, context.fmt().add("", specifier, Integer.valueOf(value)).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }

@@ -50,7 +50,7 @@ public class _FmtDateAppenderTest extends TestCase {
 	}
 
 	private static final FmtContext context =
-			FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+			FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 
 	private static final Calendar CALENDAR = new GregorianCalendar(2015, 5, 2, 3, 12, 13);
 	static {

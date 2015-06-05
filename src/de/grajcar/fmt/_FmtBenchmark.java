@@ -185,5 +185,5 @@ import junit.framework.Assert;
 	private Object[] objects;
 	private final Object[] bytes = new Object[100];
 	private final Object[] dates = new Object[100];
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 }

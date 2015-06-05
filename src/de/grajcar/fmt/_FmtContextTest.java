@@ -8,32 +8,32 @@ import junit.framework.TestCase;
 
 @SuppressWarnings("boxing") public final class _FmtContextTest extends TestCase {
 	public void testRawPoor() {
-		final FmtContext context = FmtContext.newPoorContext(FmtOption.LOCALIZED_NO);
+		final FmtContext context = FmtContext.poorContext(FmtOption.LOCALIZED_NO);
 		assertIsPoor(context);
 		assertIsRaw(context);
 	}
 
 	public void testRawLocalized() {
-		final FmtContext context = FmtContext.newPoorContext(FmtOption.LOCALIZED_YES);
+		final FmtContext context = FmtContext.poorContext(FmtOption.LOCALIZED_YES);
 		assertIsPoor(context);
 		assertIsLocalized(context);
 	}
 
 	public void testRichRaw() {
-		final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO);
+		final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO);
 		assertIsRich(context);
 		assertIsRaw(context);
 	}
 
 	public void testRichLocalized() {
-		final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_YES);
+		final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_YES);
 		assertIsRich(context);
 		assertIsLocalized(context);
 	}
 
 	public void testPrefer() {
 		final FmtContext preferringContext = FmtContext
-				.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
+				.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
 				.prefer("X", Byte.class, false)
 				.prefer("px", Long.class, false);
 		assertEquals("fffffffffffffffe", preferringContext.stringify(-2L));
@@ -44,7 +44,7 @@ import junit.framework.TestCase;
 		final Calendar calendar = new GregorianCalendar(2014, 8, 16, 20, 46, 25);
 		final long millis = calendar.getTimeInMillis() + 123;
 		final FmtContext context = FmtContext
-				.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
+				.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING)
 				.prefer("dd.MM.yyyy (EEE)", java.sql.Date.class, true)
 				.prefer("hh:mm:ss.SSS", java.sql.Time.class, true)
 				.prefer("yyMMdd-hhmmss", java.util.Date.class, false);

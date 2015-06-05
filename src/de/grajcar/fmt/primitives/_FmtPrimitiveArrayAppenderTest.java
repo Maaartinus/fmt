@@ -18,7 +18,7 @@ import de.grajcar.fmt.FmtOption;
 		assertEquals(expected, context.fmt().add("", specifier, subject2).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 
 	private final byte[] bytes1 = {60, -100};
 	private final short[] shorts1 = {60, -100};

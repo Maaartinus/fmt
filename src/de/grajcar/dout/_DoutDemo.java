@@ -10,7 +10,7 @@ import de.grajcar.fmt.FmtOption;
 public class _DoutDemo {
 	public static void main(String[] args) {
 		final FmtContext context = FmtContext
-				.newRichContext(FmtOption.LOCALIZED_NO)
+				.richContext(FmtOption.LOCALIZED_NO)
 				.prefer("dd.MM.yyyy=EEE", Date.class, false);
 		Dout.Initializer.doutifier().context(context);
 		Dout.Initializer.useSystemOut();

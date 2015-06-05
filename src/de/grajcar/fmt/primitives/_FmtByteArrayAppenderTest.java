@@ -37,7 +37,7 @@ public final class _FmtByteArrayAppenderTest extends TestCase {
 		assertEquals(expected, context.fmt().add("", specifier, subject).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.LOCALIZED_NO, FmtOption.ON_ERROR_THROWING);
 
 	private final byte[] bytes = {0, 1, 30, 100, -100};
 }

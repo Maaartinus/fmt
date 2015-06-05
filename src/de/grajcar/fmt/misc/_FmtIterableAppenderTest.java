@@ -28,7 +28,7 @@ public class _FmtIterableAppenderTest extends TestCase {
 		assertEquals(expected, context.fmt().format("[]", subject).take());
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING)
+	private static final FmtContext context = FmtContext.richContext(FmtOption.ON_ERROR_THROWING)
 			.prefer("x", Integer.class, false)
 			.prefer("u", byte[].class, true);
 	private static final FmtAppender appender = new FmtIterableAppender();

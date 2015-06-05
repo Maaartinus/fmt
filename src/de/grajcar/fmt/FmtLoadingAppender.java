@@ -21,7 +21,7 @@ import de.grajcar.fmt.intenal.MgPrimitiveInfo;
 import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 
 /**
- * The engine responsible for loading predefined appenders for {@link FmtContext#newRichContext(FmtOption...)}.
+ * The engine responsible for loading predefined appenders for {@link FmtContext#richContext(FmtOption...)}.
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE) final class FmtLoadingAppender extends FmtAppender {
 	@Override public FmtAppender delegateAppender(FmtKey key) {

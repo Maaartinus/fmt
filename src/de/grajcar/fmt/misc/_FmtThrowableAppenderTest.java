@@ -56,5 +56,5 @@ public final class _FmtThrowableAppenderTest extends TestCase {
 		return out.toString(encoding);
 	}
 
-	private static final FmtContext context = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING);
+	private static final FmtContext context = FmtContext.richContext(FmtOption.ON_ERROR_THROWING);
 }
