@@ -25,6 +25,7 @@ public class _FmtIterableAppenderTest extends TestCase {
 		final StringBuilder sb = new StringBuilder();
 		appender.appendTo(sb, context, subject);
 		assertEquals(expected, sb.toString());
+		assertEquals(expected, context.fmt().format("[]", subject).take());
 	}
 
 	private static final FmtContext context = FmtContext.newRichContext(FmtOption.ON_ERROR_THROWING)

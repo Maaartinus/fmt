@@ -1,5 +1,6 @@
 package de.grajcar.fmt;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,19 +62,20 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 	}
 
 	private List<String> supertypeSimpleNames(Class<?> subjectClass) {
-		final Map<String, String> nameToSimpleName = Maps.newHashMap();
-		for (Class<?> cl = subjectClass; cl!=null; cl = cl.getSuperclass()) {
-			if (MISC_CLASS_NAMES.contains(cl.getName())) nameToSimpleName.put(cl.getName(), cl.getSimpleName());
-			for (final Class<?> ci : cl.getInterfaces()) {
-				if (MISC_CLASS_NAMES.contains(ci.getName())) nameToSimpleName.put(ci.getName(), ci.getSimpleName());
-			}
-		}
+		final Map<String, String> nameToSimpleNameMap = Maps.newHashMap();
+		addSupertypesTo(nameToSimpleNameMap, subjectClass);
 		final List<String> result = Lists.newArrayList();
 		for (final String s : MISC_CLASS_NAMES) {
-			final String simpleName = nameToSimpleName.get(s);
+			final String simpleName = nameToSimpleNameMap.get(s);
 			if (simpleName!=null) result.add(simpleName);
 		}
 		return result;
+	}
+
+	private void addSupertypesTo(Map<String, String> nameToSimpleNameMap, Class<?> cl) {
+		if (MISC_CLASS_NAMES.contains(cl.getName())) nameToSimpleNameMap.put(cl.getName(), cl.getSimpleName());
+		if (cl.getSuperclass() != null) addSupertypesTo(nameToSimpleNameMap, cl.getSuperclass());
+		for (final Class<?> ci : cl.getInterfaces()) addSupertypesTo(nameToSimpleNameMap, ci);
 	}
 
 	private ImmutableList<FmtAppender> arrayAppenders(Class<?> subjectClass) {
@@ -104,17 +106,17 @@ import de.grajcar.fmt.primitives.FmtPrimitiveAppender;
 	}
 
 	/**
-	 * Intentionally using class names in order not to force class loading.
+	 * Intentionally using class names in order not to force class loading (except for classes which are loaded anyway).
 	 *
 	 * <p>The order is significant as e.g. SQLException is both @ {@link Throwable} amd (@link Iterable<Throwable>}.
 	 */
 	private static final ImmutableSet<String> MISC_CLASS_NAMES = ImmutableSet.of(
 			"java.util.Date",
-			"java.lang.Throwable",
-			"java.lang.CharSequence",
-			"java.util.Iterator",
-			"java.lang.Iterable",
-			"java.lang.Class"
+			Throwable.class.getName(),
+			CharSequence.class.getName(),
+			Iterator.class.getName(),
+			Iterable.class.getName(),
+			Class.class.getName()
 			);
 
 	private static final String PRIMITIVES_PACKAGE_NAME = FmtPrimitiveAppender.class.getPackage().getName();
